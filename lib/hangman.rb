@@ -22,14 +22,22 @@ class Hangman
 
   def play!
     print_welcome()
-    letter_or_word = ask_player_letter_or_word()
-    case letter_or_word
-    when "L"
-      letter_loop()
-    when "W"
-      word_guess()
-    else
-      puts "There is an error in the program"
+
+    until @letters_guessed_correct == @word_lenght || @failed_attempts == 10
+      letter_or_word = ask_player_letter_or_word()
+      case letter_or_word
+      when "L"
+        letter_guess()
+        if @failed_attempts == 10
+          puts "Sorry, you made 10 wrong guesses, game over: DIE!"
+        elsif @letters_guessed_correct == @word_lenght
+          puts "You got it right! You're Awesome!"
+        end
+      when "W"
+        word_guess()
+      else
+        puts "There is an error in the program"
+      end
     end
   end
 
@@ -50,11 +58,11 @@ class Hangman
   def print_welcome
     puts "Welcome to Hangman!"
     puts "Guess the word: or be hung!"
-    puts "So make sure to guess it right because after 10 wrong letter guesses you're DONE...\n"
+    puts "Remember that you after 10 letter guesses you die, and you can only one time guess the whole word. If you have that wrong, you die too..."
   end
 
   def ask_player_letter_or_word
-    puts "Would you like to guess a letter or the whole word?"
+    puts "\nWould you like to guess a letter or the whole word?"
     print "Please enter L for letter or W for word: "
     player_choice = gets.chomp.upcase.to_s
     while player_choice != "L" && player_choice != "W"
@@ -64,23 +72,13 @@ class Hangman
     return player_choice
   end
 
-  def letter_loop
-    until @letters_guessed_correct == @word_lenght || @failed_attempts == 10
-      letter = get_letter_player()
-      check_letter_in_random_word(@guess_letter)
-      if @correct_guess == false
-        @failed_attempts += 1
-      end
-      print_current_status()
+  def letter_guess
+    letter = get_letter_player()
+    check_letter_in_random_word(@guess_letter)
+    if @correct_guess == false
+      @failed_attempts += 1
     end
-
-    if @failed_attempts == 10
-      puts "Sorry, you made 10 wrong guesses, game over: DIE!"
-    elsif @letters_guessed_correct == @word_lenght
-      puts "You got it right! You're Awesome!"
-    else
-      puts "There must be an error... hmm..."
-    end
+    print_current_status()
   end
 
   def get_letter_player
@@ -98,14 +96,17 @@ class Hangman
         # => get position letter
         # => give that position to the change method
       if letter_random_word == guess_letter
-
         @letters_guessed_correct += 1
         change_guess_word_status(position_letter)
         @correct_guess = true
       end
       position_letter += 1
     end
-    puts "WhoopWhoop: Letter #{guess_letter} is in the word!\n"
+    if @correct_guess == true
+      puts "WhoopWhoop: Letter #{guess_letter} is in the word!\n"
+    else
+      puts "No, sorry, that letter isn't in the word."
+    end
   end
 
   def change_guess_word_status(position_letter)
@@ -119,18 +120,18 @@ class Hangman
       printable_guess_word_status += "#{letter} "
     end
     puts "Guess word status = #{printable_guess_word_status}"
-    puts "You guessed #{@failed_attempts} times wrong! Remember, when reaching 10 you lose!"
+    puts "You guessed #{@failed_attempts} times wrong. Remember, when reaching 10 you lose!"
   end
 
   def word_guess
-    puts "Alright,this is it."
+    puts "\nAlright, this is it."
     puts "Please write down the whole word... any letter wrong and you Die!"
     word_guess = gets.chomp.upcase
 
     if word_guess == @random_word
       puts "Wow! You did it, you WIN!"
     else
-      puts "Autsj... that's not the right word, you DIE!"
+      puts "Autsj... #{word_guess} is not the right word, you DIE!"
     end
   end
 
