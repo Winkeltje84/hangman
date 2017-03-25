@@ -11,10 +11,10 @@ class Hangman
 
       #sets word lenght & prints it for test
     @word_lenght = @random_word.length
-    puts "lenght of the random_word = #{word_lenght}"
+    puts "lenght of the random_word = #{@word_lenght}"
 
       #sets the array of the word to guess like [_, _, _]
-    set_start(word_lenght)
+    set_start(@word_lenght)
 
       #sets initial number of guesses
     @bad_guesses_left = 10
@@ -24,10 +24,11 @@ class Hangman
     print_welcome()
 
       #below should be in loop
-    untill @letters_guessed_correct == @word_lenght
-      letter = get_letter_player()
-      check_letter_in_random_word(@guess_letter)
-    end
+
+
+    letter = get_letter_player()
+    check_letter_in_random_word(@guess_letter)
+
 
   end
 
@@ -76,9 +77,10 @@ class Hangman
   end
 
   def change_guess_word_status(position_letter)
-      # =>  TESTING puts "position_letter = #{position_letter.to_s}"
+    puts "position_letter = #{position_letter.to_s}"
     @guess_word_status[position_letter] = @guess_letter
     puts "new guess word status = #{@guess_word_status}"
+
   end
 
 end
