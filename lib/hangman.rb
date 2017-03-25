@@ -24,11 +24,10 @@ class Hangman
     print_welcome()
 
       #below should be in loop
-
-
-    letter = get_letter_player()
-    check_letter_in_random_word(@guess_letter)
-
+    until @letters_guessed_correct == @word_lenght
+      letter = get_letter_player()
+      check_letter_in_random_word(@guess_letter)
+    end
 
   end
 
