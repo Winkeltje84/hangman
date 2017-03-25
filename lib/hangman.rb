@@ -6,9 +6,21 @@ class Hangman
     @random_word = @word.word.upcase
     puts "FOR TESTING: The random word is: #{@random_word}"
     @word_lenght = @random_word.length
-    puts "FOR TESTING: lenght of the random_word = #{@word_lenght}"
 
     set_start(@word_lenght)
+  end
+
+  def set_start(word_lenght)
+    @guess_word_status = []
+    @failed_attempts = 0
+    @win = false
+    @lose = false
+
+    # => turn guess_word_status in an array of empty '_' of lenght random_word
+    for array_number in 0...word_lenght
+      @guess_word_status.push("_")
+    end
+    print "\n\n"
   end
 
   def play!
@@ -19,9 +31,9 @@ class Hangman
       letter_or_word = ask_player_letter_or_word()
 
       case letter_or_word
-      when "L" #player guesses letter
+      when "L"
           letter_guess()
-      when "W" #player guesses word
+      when "W"
           word_guess()
       else
           puts "There is an error in the program"
@@ -35,22 +47,10 @@ class Hangman
     end
   end
 
-  def set_start(word_lenght)
-    @guess_word_status = []
-    @failed_attempts = 0
-    @win = false
-    @lose = false
-
-    for letter_number in 1..word_lenght
-      @guess_word_status.push("_")
-    end
-    print "\n\n"
-  end
-
   def print_welcome
     puts "Welcome to Hangman!"
     puts "Guess the word: or be hung!"
-    puts "Remember that you after 10 letter guesses you lose :-("
+    puts "Remember that you after 10 letter guesses you lose."
   end
 
   def ask_player_letter_or_word
@@ -58,7 +58,7 @@ class Hangman
     print "Please enter L for letter or W for word: "
     player_choice = gets.chomp.upcase.to_s
     while player_choice != "L" && player_choice != "W"
-      print "\nCome on... L or W please... try again: "
+      print "\nPlease choose an 'L' or a 'W': "
       player_choice = gets.chomp.upcase
     end
     return player_choice
