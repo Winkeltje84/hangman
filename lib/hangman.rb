@@ -14,40 +14,43 @@ class Hangman
   def play!
     print_welcome()
 
-    until @letters_guessed_correct == @word_lenght || @failed_attempts == 10
+    until @win == true || @lose == true
+      print_current_status()
       letter_or_word = ask_player_letter_or_word()
+
       case letter_or_word
-      when "L"
-        letter_guess()
-        if @failed_attempts == 10
-          puts "Sorry, you made 10 wrong guesses, game over: DIE!"
-        elsif @letters_guessed_correct == @word_lenght
-          puts "You got it right! You're Awesome!"
-        end
-      when "W"
-        word_guess()
-        break
+      when "L" #player guesses letter
+          letter_guess()
+      when "W" #player guesses word
+          word_guess()
       else
-        puts "There is an error in the program"
+          puts "There is an error in the program"
+      end
+
+      if @lose == true
+        print_lose
+      elsif @win == true
+        print_win
       end
     end
   end
 
   def set_start(word_lenght)
     @guess_word_status = []
-    @letters_guessed_correct = 0
     @failed_attempts = 0
+    @win = false
+    @lose = false
+
     for letter_number in 1..word_lenght
       @guess_word_status.push("_")
     end
-    puts
-    puts
+    print "\n\n"
   end
 
   def print_welcome
     puts "Welcome to Hangman!"
     puts "Guess the word: or be hung!"
-    puts "Remember that you after 10 letter guesses you die, and you can only one time guess the whole word. If you have that wrong, you die too..."
+    puts "Remember that you after 10 letter guesses you lose :-("
   end
 
   def ask_player_letter_or_word
@@ -66,8 +69,14 @@ class Hangman
     check_letter_in_random_word(@guess_letter)
     if @correct_guess == false
       @failed_attempts += 1
+      if @failed_attempts == 10
+        @lose = true
+      end
     end
-    print_current_status()
+    guess_word_status_string = @guess_word_status.join()
+    if guess_word_status_string == @random_word
+      @win = true
+    end
   end
 
   def get_letter_player
@@ -81,16 +90,17 @@ class Hangman
     @correct_guess = false
     @random_word.each_char do |letter_random_word|
       if letter_random_word == guess_letter
-        @letters_guessed_correct += 1
         change_guess_word_status(position_letter)
         @correct_guess = true
       end
       position_letter += 1
     end
     if @correct_guess == true
+      line_of_30_stars
       puts "WhoopWhoop: Letter '#{guess_letter}' is in the word!\n"
     else
-      puts "No, sorry, that letter isn't in the word."
+      line_of_30_stars
+      puts "No, sorry, '#{guess_letter}' isn't in the word."
     end
   end
 
@@ -103,20 +113,38 @@ class Hangman
     @guess_word_status.each do |letter|
       printable_guess_word_status += "#{letter} "
     end
-    puts "You guessed #{@failed_attempts} times wrong. Remember, when reaching 10 you lose!"
+    puts "\nYou guessed #{@failed_attempts} times wrong so far. Remember, when reaching 10 you lose!"
     puts "Guess word status = #{printable_guess_word_status}"
   end
 
   def word_guess
-    puts "\nYou want to guess the whole word in ones? Alright, this is it."
-    puts "Please write down the whole word... any letter wrong and you Die!"
+    puts "\nYou want to guess the whole word."
+    print "Please enter what you think the word is: "
     word_guess = gets.chomp.upcase
 
     if word_guess == @random_word
-      puts "Wow! You did it, you WIN!"
+      line_of_30_stars
+      @win = true
     else
-      puts "Autsj... #{word_guess} is not the right word, you DIE!"
+      line_of_30_stars
+      puts "No sorry, #{word_guess} is not right..."
+      @failed_attempts += 1
+      if @failed_attempts == 10
+        @lose = true
+      end
     end
   end
 
+  def line_of_30_stars
+    puts "* " * 30
+  end
+
+  def print_win
+    puts "Wow! You did it, the word is #{@random_word}! You guessed the word & you WIN!"
+  end
+
+  def print_lose
+    puts "Sorry, you made 10 wrong guesses, game over!"
+    puts "The word was : #{@random_word}"
+  end
 end
