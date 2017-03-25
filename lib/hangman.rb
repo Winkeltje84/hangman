@@ -3,21 +3,12 @@ require File.expand_path("../random_word", __FILE__)
 class Hangman
   def initialize
     @word = RandomWord.new
-      #sets random word to @random_word & prints random_word
     @random_word = @word.word.upcase
-
-      #print random_word for testing
-    puts "The random word is: #{@random_word}"
-
-      #sets word lenght & prints it for test
+    puts "FOR TESTING: The random word is: #{@random_word}"
     @word_lenght = @random_word.length
-    puts "lenght of the random_word = #{@word_lenght}"
+    puts "FOR TESTING: lenght of the random_word = #{@word_lenght}"
 
-      #sets the array of the word to guess like [_, _, _]
     set_start(@word_lenght)
-
-      #sets initial number of guesses
-    @bad_guesses_left = 10
   end
 
   def play!
@@ -35,13 +26,13 @@ class Hangman
         end
       when "W"
         word_guess()
+        break
       else
         puts "There is an error in the program"
       end
     end
   end
 
-  # sets initial show for the word guess (an array of '_')
   def set_start(word_lenght)
     @guess_word_status = []
     @letters_guessed_correct = 0
@@ -49,8 +40,6 @@ class Hangman
     for letter_number in 1..word_lenght
       @guess_word_status.push("_")
     end
-      ##print for testing:
-    print "The empty array to start at: #{@guess_word_status}"
     puts
     puts
   end
@@ -91,10 +80,6 @@ class Hangman
     position_letter = 0
     @correct_guess = false
     @random_word.each_char do |letter_random_word|
-          #TESTING: puts "#{letter_random_word} position #{position_letter}"
-        #if the letter equals to the letter in the @random_word:
-        # => get position letter
-        # => give that position to the change method
       if letter_random_word == guess_letter
         @letters_guessed_correct += 1
         change_guess_word_status(position_letter)
@@ -103,14 +88,13 @@ class Hangman
       position_letter += 1
     end
     if @correct_guess == true
-      puts "WhoopWhoop: Letter #{guess_letter} is in the word!\n"
+      puts "WhoopWhoop: Letter '#{guess_letter}' is in the word!\n"
     else
       puts "No, sorry, that letter isn't in the word."
     end
   end
 
   def change_guess_word_status(position_letter)
-    # FOR TESTING puts "position_letter = #{position_letter.to_s}"
     @guess_word_status[position_letter] = @guess_letter
   end
 
@@ -119,12 +103,12 @@ class Hangman
     @guess_word_status.each do |letter|
       printable_guess_word_status += "#{letter} "
     end
-    puts "Guess word status = #{printable_guess_word_status}"
     puts "You guessed #{@failed_attempts} times wrong. Remember, when reaching 10 you lose!"
+    puts "Guess word status = #{printable_guess_word_status}"
   end
 
   def word_guess
-    puts "\nAlright, this is it."
+    puts "\nYou want to guess the whole word in ones? Alright, this is it."
     puts "Please write down the whole word... any letter wrong and you Die!"
     word_guess = gets.chomp.upcase
 
