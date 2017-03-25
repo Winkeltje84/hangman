@@ -22,25 +22,15 @@ class Hangman
 
   def play!
     print_welcome()
-
-      #below should be in loop
-    until @letters_guessed_correct == @word_lenght || @failed_attempts == 10
-      letter = get_letter_player()
-      check_letter_in_random_word(@guess_letter)
-      if @correct_guess == false
-        @failed_attempts += 1
-      end
-      print_current_status()
-    end
-
-    if @failed_attempts == 10
-      puts "Sorry, you made 10 wrong guesses, game over: DIE!"
-    elsif @letters_guessed_correct == @word_lenght
-      puts "You got it right! You're Awesome!"
+    letter_or_word = ask_player_letter_or_word()
+    case letter_or_word
+    when "L"
+      letter_loop()
+    when "W"
+      word_guess()
     else
-      puts "There must be an error... hmm..."
+      puts "There is an error in the program"
     end
-
   end
 
   # sets initial show for the word guess (an array of '_')
@@ -61,6 +51,36 @@ class Hangman
     puts "Welcome to Hangman!"
     puts "Guess the word: or be hung!"
     puts "So make sure to guess it right because after 10 wrong letter guesses you're DONE...\n"
+  end
+
+  def letter_loop
+    until @letters_guessed_correct == @word_lenght || @failed_attempts == 10
+      letter = get_letter_player()
+      check_letter_in_random_word(@guess_letter)
+      if @correct_guess == false
+        @failed_attempts += 1
+      end
+      print_current_status()
+    end
+
+    if @failed_attempts == 10
+      puts "Sorry, you made 10 wrong guesses, game over: DIE!"
+    elsif @letters_guessed_correct == @word_lenght
+      puts "You got it right! You're Awesome!"
+    else
+      puts "There must be an error... hmm..."
+    end
+  end
+
+  def ask_player_letter_or_word
+    puts "Would you like to guess a letter or the whole word?"
+    print "Please enter L for letter or W for word"
+    player_choice = gets.chomp.upcase.to_s
+    while player_choice != "L" && player_choice != "W"
+      puts "Come on... L or W please..."
+      player_choice = gets.chomp.upcase
+    end
+    return player_choice
   end
 
   def get_letter_player
