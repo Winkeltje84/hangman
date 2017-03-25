@@ -24,9 +24,21 @@ class Hangman
     print_welcome()
 
       #below should be in loop
-    until @letters_guessed_correct == @word_lenght
+    until @letters_guessed_correct == @word_lenght || @failed_attempts == 10
       letter = get_letter_player()
       check_letter_in_random_word(@guess_letter)
+      if @correct_guess == false
+        @failed_attempts += 1
+      end
+      print_current_status()
+    end
+
+    if @failed_attempts == 10
+      puts "Sorry, you made 10 wrong guesses, game over: DIE!"
+    elsif @letters_guessed_correct == @word_lenght
+      puts "You got it right! You're Awesome!"
+    else
+      puts "There must be an error... hmm..."
     end
 
   end
@@ -35,7 +47,7 @@ class Hangman
   def set_start(word_lenght)
     @guess_word_status = []
     @letters_guessed_correct = 0
-
+    @failed_attempts = 0
     for letter_number in 1..word_lenght
       @guess_word_status.push("_")
     end
@@ -48,38 +60,46 @@ class Hangman
   def print_welcome
     puts "Welcome to Hangman!"
     puts "Guess the word: or be hung!"
-    puts "So make sure to guess it right because after 10 wrong letter guesses you're DONE..."
+    puts "So make sure to guess it right because after 10 wrong letter guesses you're DONE...\n"
   end
 
   def get_letter_player
     print "Please give a letter: "
     @guess_letter = gets.chomp.upcase
-    puts "You chose #{@guess_letter}"
+    puts "\nYou chose #{@guess_letter}"
   end
 
   def check_letter_in_random_word(guess_letter)
     position_letter = 0
+    @correct_guess = false
     @random_word.each_char do |letter_random_word|
           #TESTING: puts "#{letter_random_word} position #{position_letter}"
         #if the letter equals to the letter in the @random_word:
         # => get position letter
         # => give that position to the change method
       if letter_random_word == guess_letter
-        puts "WhoopWhoop: Letter #{guess_letter} is in the word!"
+
         @letters_guessed_correct += 1
         change_guess_word_status(position_letter)
+        @correct_guess = true
       end
       position_letter += 1
     end
-    puts
-    puts guess_letter
+    puts "WhoopWhoop: Letter #{guess_letter} is in the word!\n"
   end
 
   def change_guess_word_status(position_letter)
-    puts "position_letter = #{position_letter.to_s}"
+    # FOR TESTING puts "position_letter = #{position_letter.to_s}"
     @guess_word_status[position_letter] = @guess_letter
-    puts "new guess word status = #{@guess_word_status}"
+  end
 
+  def print_current_status
+    printable_guess_word_status = ""
+    @guess_word_status.each do |letter|
+      printable_guess_word_status += "#{letter} "
+    end
+    puts "Guess word status = #{printable_guess_word_status}"
+    puts "You guessed #{@failed_attempts} times wrong! Remember, when reaching 10 you lose!"
   end
 
 end
