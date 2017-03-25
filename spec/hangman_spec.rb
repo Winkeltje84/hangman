@@ -19,7 +19,7 @@ RSpec.describe Hangman do
 
 end
 
-
+=begin
 describe Game do
   subject { Game.new }
 
@@ -46,3 +46,4 @@ describe Game do
     expect(subject.type_of_game).to eq('human v. human')
   end
 end
+=eind
