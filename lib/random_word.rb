@@ -9,6 +9,5 @@ class RandomWord
 
   def positions_for(characters: [])
     # for you to implement :)
-
   end
 end
