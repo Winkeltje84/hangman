@@ -84,7 +84,7 @@ class Hangman
     end
   end
 
-    # => called from play!()
+    # => called from letter_guess()
   def get_letter_player
     print "Please give a letter: "
     @guess_letter = gets.chomp.upcase
@@ -118,12 +118,12 @@ class Hangman
 
     # => called from play!()
   def print_current_status
-    printable_guess_word_status = ""
+    print_guess_word_status = ""
     @guess_word_status.each do |letter|
-      printable_guess_word_status += "#{letter} "
+      print_guess_word_status += "#{letter} "
     end
     puts "\nYou guessed #{@failed_attempts} times wrong so far. Remember, when reaching 10 you lose!"
-    puts "Guess word status = #{printable_guess_word_status}"
+    puts "Guess word status = #{print_guess_word_status}"
   end
 
     # => called from play!()
