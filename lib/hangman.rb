@@ -3,25 +3,39 @@ require File.expand_path("../random_word", __FILE__)
 class Hangman
   def initialize
     @word = RandomWord.new
-    @random_word = @word.word.upcase
+    @random_word = @word.word.upcase #turn object into string
     puts "FOR TESTING: The random word is: #{@random_word}"
     @word_lenght = @random_word.length
-    puts "FOR TESTING: lenght of the random_word = #{@word_lenght}"
 
     set_start(@word_lenght)
   end
 
+    # => called from initialize()
+  def set_start(word_lenght)
+    @guess_word_status = []
+    @failed_attempts = 0
+    @win = false
+    @lose = false
+
+    # => creates empty array of '_'-s of lenght random_word
+    for array_number in 0...word_lenght
+      @guess_word_status.push("_")
+    end
+    print "\n\n"
+  end
+
+    # => called from Hangman file
   def play!
     print_welcome()
 
-    until @win == true || @lose == true
+    until @win || @lose
       print_current_status()
       letter_or_word = ask_player_letter_or_word()
 
       case letter_or_word
-      when "L" #player guesses letter
+      when "L"
           letter_guess()
-      when "W" #player guesses word
+      when "W"
           word_guess()
       else
           puts "There is an error in the program"
@@ -35,35 +49,26 @@ class Hangman
     end
   end
 
-  def set_start(word_lenght)
-    @guess_word_status = []
-    @failed_attempts = 0
-    @win = false
-    @lose = false
-
-    for letter_number in 1..word_lenght
-      @guess_word_status.push("_")
-    end
-    print "\n\n"
-  end
-
+    # => called from play!()
   def print_welcome
     puts "Welcome to Hangman!"
     puts "Guess the word: or be hung!"
-    puts "Remember that you after 10 letter guesses you lose :-("
+    puts "Remember that you after 10 letter guesses you lose."
   end
 
+    # => called from play!()
   def ask_player_letter_or_word
     puts "\nWould you like to guess a letter or the whole word?"
     print "Please enter L for letter or W for word: "
     player_choice = gets.chomp.upcase.to_s
     while player_choice != "L" && player_choice != "W"
-      print "\nCome on... L or W please... try again: "
+      print "\nPlease choose an 'L' or a 'W': "
       player_choice = gets.chomp.upcase
     end
     return player_choice
   end
 
+    # => called from play!()
   def letter_guess
     letter = get_letter_player()
     check_letter_in_random_word(@guess_letter)
@@ -79,12 +84,14 @@ class Hangman
     end
   end
 
+    # => called from play!()
   def get_letter_player
     print "Please give a letter: "
     @guess_letter = gets.chomp.upcase
     puts "\nYou chose #{@guess_letter}"
   end
 
+    # => called from letter_guess()
   def check_letter_in_random_word(guess_letter)
     position_letter = 0
     @correct_guess = false
@@ -104,10 +111,12 @@ class Hangman
     end
   end
 
+    # => called from check_letter_in_random_word(position_letter)
   def change_guess_word_status(position_letter)
     @guess_word_status[position_letter] = @guess_letter
   end
 
+    # => called from play!()
   def print_current_status
     printable_guess_word_status = ""
     @guess_word_status.each do |letter|
@@ -117,6 +126,7 @@ class Hangman
     puts "Guess word status = #{printable_guess_word_status}"
   end
 
+    # => called from play!()
   def word_guess
     puts "\nYou want to guess the whole word."
     print "Please enter what you think the word is: "
@@ -135,14 +145,17 @@ class Hangman
     end
   end
 
+    # => called from check_letter_in_random_word & word_guess
   def line_of_30_stars
     puts "* " * 30
   end
 
+    # => called from play!()
   def print_win
     puts "Wow! You did it, the word is #{@random_word}! You guessed the word & you WIN!"
   end
 
+    # => called from play!()
   def print_lose
     puts "Sorry, you made 10 wrong guesses, game over!"
     puts "The word was : #{@random_word}"
