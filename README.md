@@ -2,7 +2,7 @@
 > Individual assignment after week #4 of Codaisseur Academy (half way through)
 
 ## Current State
-This assignment was done over the weekend and the state it is currently in is still like it was at the time. It still needs work on the tests mainly and 
+This assignment was done over the weekend and the state it is currently in is still like it was at the time. The game is properly working, but it still needs work on the tests.
 
 ## About
 Our mission is to build a Hangman game. This is a game in which the computer picks a random word and a player needs to guess it by suggesting letters, within an unlimited amount of guesses, but only 10 of them are allowed to be wrong.
@@ -27,4 +27,4 @@ $ bin/hangman
 
 ## Related Documentation
   * [Ruby on Rails](http://rubyonrails.org/)
-  * [Hangman Ruby Starter](https://github.com/Codaisseur/hangman-ruby-starter)
+  * [Hangman Ruby Starter](https://github.com/Codaisseur/hangman-ruby-starter) (this starter was provided by Codaisseur)
